@@ -1,51 +1,29 @@
-function detectCardFields() {
-    const numberField = document.querySelector("input[name*='card'], input[id*='card'], input[autocomplete='cc-number']");
-    const dateField = document.querySelector("input[name*='exp'], input[id*='exp'], input[autocomplete='cc-exp']");
-    const cvvField  = document.querySelector("input[name*='cvv'], input[name*='cvc'], input[id*='cvv'], input[id*='cvc'], input[autocomplete='cc-csc']");
+function preencherCampos(cartao) {
+    if (!cartao) return;
 
-    if (!numberField) return;
+    const inputs = document.querySelectorAll("input");
 
-    if (!document.getElementById("autoFillBTN")) {
-        const btn = document.createElement("button");
-        btn.id = "autoFillBTN";
-        btn.innerText = "Usar Cartão Salvo";
-        btn.style.cssText = `
-            padding: 6px 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 8px 0;
-            display: block;
-        `;
-        numberField.parentNode.insertBefore(btn, numberField);
+    inputs.forEach(input => {
+        const nome = input.name.toLowerCase();
+        const id = input.id.toLowerCase();
+        const ph = input.placeholder.toLowerCase();
 
-        btn.onclick = async () => {
-            chrome.runtime.sendMessage({ action: "getCards" }, cards => {
-                if (!cards.length) {
-                    alert("Nenhum cartão salvo.");
-                    return;
-                }
+        if (nome.includes("card") && nome.includes("number")) input.value = cartao.numero;
+        if (id.includes("card") && id.includes("number")) input.value = cartao.numero;
+        if (ph.includes("número") && ph.includes("cartão")) input.value = cartao.numero;
 
-                const name = prompt("Selecione o número do cartão:\n" + cards.map(c => `${c.id} - ${c.name}`).join("\n"));
+        if (nome.includes("expiry") || ph.includes("validade")) input.value = cartao.validade;
+        if (id.includes("expiry")) input.value = cartao.validade;
 
-                if (!name) return;
-
-                chrome.runtime.sendMessage({ action: "fillCard", id: name }, card => {
-                    if (!card) return;
-
-                    if (numberField) numberField.value = card.number;
-                    if (dateField) dateField.value = card.exp;
-                    if (cvvField) cvvField.value = card.cvv;
-
-                    numberField.dispatchEvent(new Event("input", { bubbles: true }));
-                    dateField?.dispatchEvent(new Event("input", { bubbles: true }));
-                    cvvField?.dispatchEvent(new Event("input", { bubbles: true }));
-                });
-            });
-        };
-    }
+        if (nome.includes("cvv") || nome.includes("cvc") || ph.includes("cvv")) input.value = cartao.cvv;
+        if (id.includes("cvv") || id.includes("cvc")) input.value = cartao.cvv;
+    });
 }
 
-setInterval(detectCardFields, 1200);
+function verificarPreenchimento() {
+    chrome.runtime.sendMessage({ action: "obterCartaoSelecionado" }, (cartao) => {
+        if (cartao) preencherCampos(cartao);
+    });
+}
+
+setInterval(verificarPreenchimento, 1500);
