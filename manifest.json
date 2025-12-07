@@ -2,11 +2,10 @@
   "manifest_version": 3,
   "name": "Preenchedor de Cartões",
   "version": "1.0",
-  "description": "Preenche formulários de cartão de crédito automaticamente.",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "description": "Extensão para salvar e preencher cartões automaticamente em checkouts.",
+  "permissions": ["storage", "activeTab", "scripting"],
   "action": {
-    "default_popup": "popup.html",
-    "default_title": "Cartões Salvos"
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js"
