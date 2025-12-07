@@ -1,29 +1,24 @@
 body {
-    width: 250px;
-    font-family: Arial;
+    width: 320px;
+    font-family: Arial, sans-serif;
 }
 
-input {
+input, button {
     width: 95%;
-    padding: 6px;
-    margin-bottom: 6px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 8px;
+    margin: 5px 0;
 }
 
 button {
-    width: 100%;
-    padding: 7px;
-    background: #007bff;
-    border: none;
+    background: #2a72ff;
     color: white;
-    border-radius: 6px;
+    border: none;
     cursor: pointer;
 }
 
-.card-item {
+li {
+    cursor: pointer;
     padding: 6px;
-    background: #f1f1f1;
-    margin-bottom: 6px;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 4px;
 }
