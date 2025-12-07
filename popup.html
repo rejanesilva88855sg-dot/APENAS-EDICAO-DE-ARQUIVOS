@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Cartões Salvos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Cartões Salvos</h2>
+    <h2>Adicionar Cartão Manualmente</h2>
 
-    <div id="cards"></div>
+    <input id="nome" placeholder="Nome do cartão"><br>
+    <input id="numero" placeholder="Número do cartão"><br>
+    <input id="validade" placeholder="Validade (MM/AA)"><br>
+    <input id="cvv" placeholder="CVV"><br>
+    <button id="salvar">Salvar Cartão</button>
 
-    <h3>Adicionar Novo Cartão</h3>
-    <input id="cardName" placeholder="Nome do cartão">
-    <input id="cardNumber" placeholder="Número do cartão">
-    <input id="cardExp" placeholder="Validade (MM/AA)">
-    <input id="cardCVV" placeholder="CVV">
-    <button id="save">Salvar</button>
+    <hr>
+
+    <h2>Importar via Planilha CSV</h2>
+    <input type="file" id="csvInput" accept=".csv">
+    <button id="importCsvBtn">Importar CSV</button>
+
+    <hr>
+
+    <h3>Cartões Salvos</h3>
+    <ul id="listaCartoes"></ul>
 
     <script src="popup.js"></script>
 </body>
