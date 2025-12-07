@@ -1,126 +1,108 @@
-function preencher(campo, valor) {
-    if (!campo) return;
-    campo.value = valor;
-    campo.dispatchEvent(new Event("input", { bubbles: true }));
-    campo.dispatchEvent(new Event("change", { bubbles: true }));
+function preencherCampo(input, valor) {
+    try {
+        input.focus();
+        input.value = valor;
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        input.dispatchEvent(new Event("blur", { bubbles: true }));
+    } catch (e) {}
 }
 
-function normalizar(texto) {
-    return texto.toLowerCase()
-        .replace(/[^a-z0-9]/g, "")
-        .replace(/\s+/g, "");
+function match(texto, termos) {
+    texto = texto.toLowerCase();
+    return termos.some(t => texto.includes(t));
 }
 
 function detectarCampos() {
-    const inputs = document.querySelectorAll("input, select");
+    const inputs = document.querySelectorAll("input, select, textarea");
 
     let campos = {
-        nomeTitular: null,
+        nome: null,
         numero: null,
-        validade: null,
         mes: null,
         ano: null,
+        validade: null,
         cvv: null,
         cpf: null
     };
 
-    inputs.forEach(input => {
-        const id = normalizar(input.id || "");
-        const name = normalizar(input.name || "");
-        const ph = normalizar(input.placeholder || "");
-        const aria = normalizar(input.getAttribute("aria-label") || "");
+    inputs.forEach(el => {
+        const txt = (
+            (el.id || "") +
+            " " +
+            (el.name || "") +
+            " " +
+            (el.placeholder || "") +
+            " " +
+            (el.getAttribute("aria-label") || "")
+        ).toLowerCase();
 
-        const txt = id + name + ph + aria;
-
-        // NOME TITULAR
-        if (
-            txt.includes("nome") ||
-            txt.includes("cardname") ||
-            txt.includes("holder") ||
-            txt.includes("cardholder")
-        ) {
-            campos.nomeTitular = input;
+        // NOME DO TITULAR
+        if (!campos.nome && match(txt, ["nome", "holder", "card name", "cardholder"])) {
+            campos.nome = el;
         }
 
         // NÚMERO
-        if (
-            txt.includes("cardnumber") ||
-            txt.includes("numerocartao") ||
-            txt.includes("number") && txt.includes("card") ||
-            txt.includes("cardnumber")
-        ) {
-            campos.numero = input;
-        }
-
-        // MÊS
-        if (
-            (txt.includes("exp") || txt.includes("validade") || txt.includes("venc")) &&
-            (txt.includes("mes") || txt.includes("month") || txt.match(/mm/))
-        ) {
-            campos.mes = input;
-        }
-
-        // ANO
-        if (
-            (txt.includes("exp") || txt.includes("validade") || txt.includes("venc")) &&
-            (txt.includes("ano") || txt.includes("year") || txt.match(/yy/))
-        ) {
-            campos.ano = input;
-        }
-
-        // VALIDADE COMPLETA
-        if (
-            txt.includes("exp") ||
-            txt.includes("validade") ||
-            txt.includes("vencimento")
-        ) {
-            campos.validade = input;
+        if (!campos.numero && match(txt, [
+                "num", "number", "cc", "card", "pan", "cardnumber",
+                "creditcard", "card-number", "cc-number", "payment"
+        ])) {
+            campos.numero = el;
         }
 
         // CVV
-        if (
-            txt.includes("cvv") ||
-            txt.includes("cvc") ||
-            txt.includes("codigoseguranca") ||
-            txt.includes("securitycode")
-        ) {
-            campos.cvv = input;
+        if (!campos.cvv && match(txt, ["cvv", "cvc", "security", "cod", "code"])) {
+            campos.cvv = el;
+        }
+
+        // MES
+        if (!campos.mes && match(txt, ["mes", "month", "mm", "exp"])) {
+            if (el.maxLength === 2 || el.placeholder.includes("MM")) {
+                campos.mes = el;
+            }
+        }
+
+        // ANO
+        if (!campos.ano && match(txt, ["ano", "year", "yy", "aaaa", "exp"])) {
+            if (el.maxLength === 2 || el.placeholder.includes("AA")) {
+                campos.ano = el;
+            }
+        }
+
+        // VALIDADE COMPLETA
+        if (!campos.validade && match(txt, ["validade", "venc", "expiry", "exp date"])) {
+            campos.validade = el;
         }
 
         // CPF
-        if (
-            txt.includes("cpf") ||
-            txt.includes("document") ||
-            txt.includes("tax") ||
-            txt.includes("cpfnumber")
-        ) {
-            campos.cpf = input;
+        if (!campos.cpf && match(txt, ["cpf", "document", "tax"])) {
+            campos.cpf = el;
         }
     });
 
     return campos;
 }
 
-function aplicarCartao(cartao) {
-    const campos = detectarCampos();
+function aplicar(cartao) {
+    const campo = detectarCampos();
 
-    if (campos.nomeTitular) preencher(campos.nomeTitular, cartao.nome);
-    if (campos.numero) preencher(campos.numero, cartao.numero);
+    if (campo.nome) preencherCampo(campo.nome, cartao.nome);
+    if (campo.numero) preencherCampo(campo.numero, cartao.numero);
 
-    const validadeFormatada = `${cartao.mes}${cartao.ano.toString().slice(-2)}`;
+    const mm = String(cartao.mes).padStart(2, "0");
+    const aa = String(cartao.ano).slice(-2);
+    const mmaa = mm + aa;
 
-    if (campos.validade) preencher(campos.validade, validadeFormatada);
-    if (campos.mes) preencher(campos.mes, cartao.mes);
-    if (campos.ano) preencher(campos.ano, cartao.ano);
-
-    if (campos.cvv) preencher(campos.cvv, cartao.cvv);
-
-    if (campos.cpf) preencher(campos.cpf, cartao.cpf || "");
+    if (campo.mes) preencherCampo(campo.mes, mm);
+    if (campo.ano) preencherCampo(campo.ano, cartao.ano);
+    if (campo.validade) preencherCampo(campo.validade, mmaa);
+    if (campo.cvv) preencherCampo(campo.cvv, cartao.cvv);
+    if (campo.cpf) preencherCampo(campo.cpf, cartao.cpf || "");
 }
 
-// VERIFICA A CADA 1 SEGUNDO
 setInterval(() => {
     chrome.runtime.sendMessage({ action: "obterCartaoSelecionado" }, (cartao) => {
-        if (cartao) aplicarCartao(cartao);
+        if (cartao) aplicar(cartao);
     });
-}, 1000);
+}, 1200);
