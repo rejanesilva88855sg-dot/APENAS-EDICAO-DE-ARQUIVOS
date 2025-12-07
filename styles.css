@@ -1,0 +1,29 @@
+body {
+    width: 250px;
+    font-family: Arial;
+}
+
+input {
+    width: 95%;
+    padding: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 7px;
+    background: #007bff;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.card-item {
+    padding: 6px;
+    background: #f1f1f1;
+    margin-bottom: 6px;
+    border-radius: 5px;
+}

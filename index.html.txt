@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Express | Sua Gráfica Online em Roraima</title>
+    <link rel="icon" type="image/png" href="https://s3-eu-west-1.amazonaws.com/tpd/logos/5f69d574915e300001f7cd6e/0x0.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Variáveis de Cores */
+        :root {
+            --primary-color: #FF6600; /* Laranja Principal */
+            --secondary-color: #000000;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --light-text: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Botões */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background-color: #E65C00;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: transparent;
+            color: var(--secondary-color);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--light-text);
+            box-shadow: var(--shadow);
+            padding: 10px 0;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px; 
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            margin-left: 20px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-icon {
+            display: none; 
+        }
+
+        /* Banner Principal (Hero) */
+        .hero-banner {
+            background-size: cover;
+            background-position: center;
+            color: var(--light-text);
+            text-align: center;
+            padding: 100px 15px;
+            position: relative;
+            z-index: 1; 
+        }
+
+        .hero-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); 
+            z-index: -1;
+        }
+
+        .hero-banner h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* Seção de Banners */
+        .promo-banners {
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .promo-banners h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .banners-grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr; 
+        }
+
+        .banner-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .banner-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .banner-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .desktop-only {
+            display: none; 
+        }
+
+        .upload-callout {
+            background-color: var(--light-text);
+            padding: 40px;
+            border-radius: 8px;
+            margin-top: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .upload-callout h3 {
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        /* Modais (Pop-ups) */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%; 
+            max-width: 500px; 
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Formulário de Endereço */
+        #address-form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        #address-form input[type="text"],
+        #address-form input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #address-form button {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .uploaded-file-info {
+            background-color: #e6f7ff;
+            border: 1px solid #b3e6ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        /* Info PIX */
+        .pix-info {
+            text-align: center;
+            background-color: #f0fff0;
+            border: 2px dashed #4CAF50;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .pix-icon {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .pix-key {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background-color: #E65C00;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            padding: 15px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: none; 
+        }
+
+        #close-pix-btn {
+            width: 100%;
+        }
+
+
+        /* Responsividade */
+        @media (min-width: 600px) {
+            .nav a {
+                margin-left: 15px;
+                font-size: 1em;
+            }
+            .banners-grid {
+                grid-template-columns: 1fr 1fr; 
+            }
+            .banner-large, .desktop-only {
+                grid-column: span 2; 
+            }
+        }
+
+        @media (min-width: 992px) {
+            .banners-grid {
+                grid-template-columns: 2fr 1fr 1fr; 
+            }
+
+            .desktop-only {
+                display: block; 
+            }
+
+            .banner-large {
+                grid-column: span 1; 
+                grid-row: span 2; 
+            }
+
+            .banner-small:nth-of-type(2) {
+                grid-column: span 1;
+                grid-row: 1;
+            }
+            .banner-small:nth-of-type(3) {
+                grid-column: span 1;
+                grid-row: 2;
+            }
+
+            .nav a {
+                margin-left: 25px;
+            }
+
+            .cart-icon {
+                display: inline;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <img src="https://cdnazprd.bizay.com/images/360imprimir_header.pt.png" alt="Logo Print Express" class="logo">
+            <nav class="nav">
+                <a href="#upload" class="nav-item">Serviços</a>
+                <a href="#banners" class="nav-item">Promoções</a>
+                <a href="#" class="nav-item">Ajuda</a>
+                <a href="#" class="nav-item cart-icon"><i class="fas fa-shopping-cart"></i> (0)</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-banner" style="background-image: url('https://brimpressos.com.br/grafica-em-boa-vista/');">
+        <div class="container">
+            <h1>Sua Impressão de Qualidade em Boa Vista</h1>
+            <p>Rápido, Fácil e com Entrega Garantida. Peça Já o Seu!</p>
+            <button id="upload-btn-main" class="btn btn-primary">
+                <i class="fas fa-upload"></i> UPLOAD DE ARQUIVO
+            </button>
+            <input type="file" id="file-upload" accept="image/*, .pdf" style="display: none;">
+        </div>
+    </section>
+
+    <section id="banners" class="promo-banners container">
+        <h2>🔥 Promoções e Ofertas Imperdíveis</h2>
+        <div class="banners-grid">
+            <div class="banner-item banner-large desktop-only">
+                <img src="https://www.360imprimir.com.br/Images/HomepageBanner/Discount.Large.BR.pt-BR.png?v=638941303317500000" alt="Banner Promoção Grande">
+            </div>
+            
+            <div class="banner-item banner-small">
+                <img src="https://www.360imprimir.com.br/Images/HomepageBanner/Discount.SmallTop.BR.pt-BR.png?v=638941303221550000" alt="Banner Promoção Pequena Superior">
+            </div>
+            
+            <div class="banner-item banner-small">
+                <img src="https://www.360imprimir.com.br/Images/HomepageBanner/Discount.SmallBottom.BR.pt-BR.png?v=638941303493930000" alt="Banner Promoção Pequena Inferior">
+            </div>
+            
+        </div>
+        <div class="upload-callout">
+             <h3>Pronto para Imprimir?</h3>
+             <p>Clique no botão e envie sua arte para começarmos!</p>
+             <button id="upload-btn-bottom" class="btn btn-secondary">
+                <i class="fas fa-upload"></i> ENVIAR ARTE
+             </button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Print Express. Todos os direitos reservados.</p>
+            <p>Contato: (95) 99999-9999 | E-mail: contato@printexpress.com.br</p>
+        </div>
+    </footer>
+
+
+    <div id="address-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>📦 Finalize Seu Pedido</h3>
+            <p>Preencha com seus dados para a entrega e confira o seu pedido.</p>
+
+            <div class="uploaded-file-info">
+                <strong>Arquivo Enviado:</strong> <span id="file-name-display">Nenhum arquivo.</span><br>
+                <strong>Produto:</strong> Impressão Padrão (Fictício para Exemplo)<br>
+                <strong>Valor Total:</strong> R$ 29,90 (Fictício para Exemplo)
+            </div>
+
+            <form id="address-form">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" required>
+
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" pattern="\d{5}-?\d{3}" placeholder="Ex: 69301-000" required>
+
+                <label for="endereco">Rua/Avenida</label>
+                <input type="text" id="endereco" required>
+
+                <label for="numero">Número</label>
+                <input type="text" id="numero" required>
+
+                <label for="bairro">Bairro</label>
+                <input type="text" id="bairro" required>
+
+                <label for="cidade">Cidade</label>
+                <input type="text" id="cidade" value="Boa Vista" readonly required>
+
+                <label for="telefone">Telefone (WhatsApp)</label>
+                <input type="tel" id="telefone" placeholder="Ex: (95) 99999-9999" required>
+
+                <button type="submit" class="btn btn-primary"><i class="fas fa-credit-card"></i> Pagar via PIX</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="pix-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>💰 Pagamento via PIX</h3>
+            <p>Utilize a Chave PIX abaixo para concluir sua compra. **Lembre-se de enviar o comprovante** para o nosso WhatsApp!</p>
+            
+            <div class="pix-info">
+                <img src="https://www.advocacianunes.com.br/wp-content/uploads/2022/04/logo-pix-icone-1024.png" alt="Ícone PIX" class="pix-icon">
+                
+                <p><strong>Valor:</strong> R$ 29,90</p>
+                <p><strong>Tipo de Chave:</strong> CPF</p>
+                <p class="pix-key">
+                    <span id="pix-key-display">081.904.013-43</span> 
+                    <button class="copy-btn" data-copy="08190401343"><i class="fas fa-copy"></i> Copiar</button>
+                </p>
+                <p><strong>Titular para Confirmação:</strong> Brenda do Nascimento Silveira</p>
+            </div>
+
+            <div class="confirmation-message">
+                ✅ **Pedido Realizado!** Assim que o pagamento for confirmado, entraremos em contato.
+            </div>
+
+            <button id="close-pix-btn" class="btn btn-primary">Fechar e Enviar Comprovante</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileUpload = document.getElementById('file-upload');
+            const uploadBtnMain = document.getElementById('upload-btn-main');
+            const uploadBtnBottom = document.getElementById('upload-btn-bottom');
+            const addressModal = document.getElementById('address-modal');
+            const pixModal = document.getElementById('pix-modal');
+            const addressForm = document.getElementById('address-form');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const closeModalBtns = document.querySelectorAll('.close-btn');
+            const pixKeyDisplay = document.getElementById('pix-key-display');
+            const copyBtn = document.querySelector('.copy-btn');
+            const confirmationMessage = document.querySelector('.confirmation-message');
+            const closePixBtn = document.getElementById('close-pix-btn');
+
+            let uploadedFileName = '';
+
+            // Função para abrir o seletor de arquivo
+            function triggerUpload() {
+                fileUpload.click();
+            }
+
+            // Vincula os botões ao input de arquivo
+            uploadBtnMain.addEventListener('click', triggerUpload);
+            uploadBtnBottom.addEventListener('click', triggerUpload);
+
+            // 1. Processo de Upload de Arquivo
+            fileUpload.addEventListener('change', function(event) {
+                if (event.target.files.length > 0) {
+                    const file = event.target.files[0];
+                    uploadedFileName = file.name;
+                    
+                    // Atualiza o nome do arquivo no pop-up
+                    fileNameDisplay.textContent = uploadedFileName;
+                    
+                    // Abre o pop-up de endereço
+                    addressModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // Evita a rolagem do fundo
+                }
+            });
+
+            // 2. Fechar Modais (Geral)
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    addressModal.style.display = 'none';
+                    pixModal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Restaura a rolagem
+                });
+            });
+
+            // Fechar ao clicar fora do modal
+            window.addEventListener('click', function(event) {
+                if (event.target === addressModal) {
+                    addressModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+                if (event.target === pixModal) {
+                    pixModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+
+            // 3. Submissão do Formulário de Endereço
+            addressForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                if (!uploadedFileName) {
+                    alert('Por favor, envie um arquivo antes de prosseguir.');
+                    return;
+                }
+
+                // Fechar modal de endereço
+                addressModal.style.display = 'none';
+
+                // Abrir modal do PIX
+                pixModal.style.display = 'block';
+                confirmationMessage.style.display = 'none'; 
+                document.body.style.overflow = 'hidden';
+            });
+
+            // 4. Lógica de Cópia da Chave PIX
+            copyBtn.addEventListener('click', function() {
+                const pixKey = copyBtn.getAttribute('data-copy');
+                
+                // Copia o texto para a área de transferência
+                navigator.clipboard.writeText(pixKey).then(function() {
+                    // Feedback visual
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                    
+                    // Mostra a mensagem de confirmação do pedido
+                    confirmationMessage.style.display = 'block';
+
+                    setTimeout(function() {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Erro ao copiar: ', err);
+                    alert('Não foi possível copiar. Copie a chave PIX manualmente: ' + pixKeyDisplay.textContent);
+                });
+            });
+
+            // 5. Botão de Fechar e Enviar Comprovante (operação simulada)
+            closePixBtn.addEventListener('click', function() {
+                alert("Obrigado! Seu pedido foi registrado. Agora, envie o comprovante de pagamento para nosso WhatsApp para darmos início à produção!");
+                // Simulação de fechamento
+                pixModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+        });
+    </script>
+</body>
+</html>
